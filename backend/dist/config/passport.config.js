@@ -55,9 +55,11 @@ passport_1.default.use(new passport_local_1.Strategy({
     }
 }));
 passport_1.default.serializeUser((user, done) => {
-    done(null, user._id); // store only user id
+    console.log("SERIALIZE USER:", user._id);
+    done(null, user._id);
 });
 passport_1.default.deserializeUser(async (id, done) => {
+    console.log("DESERIALIZE USER:", id);
     try {
         const user = await user_model_1.default.findById(id);
         done(null, user);
