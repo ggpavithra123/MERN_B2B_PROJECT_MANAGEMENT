@@ -11,7 +11,8 @@ const roleGuard_1 = require("../utils/roleGuard");
 const task_service_1 = require("../services/task.service");
 const http_config_1 = require("../config/http.config");
 exports.createTaskController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const body = task_validation_1.createTaskSchema.parse(req.body);
     const projectId = project_validation_1.projectIdSchema.parse(req.params.projectId);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
@@ -24,7 +25,8 @@ exports.createTaskController = (0, asyncHandler_middleware_1.asyncHandler)(async
     });
 });
 exports.updateTaskController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const body = task_validation_1.updateTaskSchema.parse(req.body);
     const taskId = task_validation_1.taskIdSchema.parse(req.params.id);
     const projectId = project_validation_1.projectIdSchema.parse(req.params.projectId);
@@ -38,18 +40,19 @@ exports.updateTaskController = (0, asyncHandler_middleware_1.asyncHandler)(async
     });
 });
 exports.getAllTasksController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a, _b, _c, _d;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
     const filters = {
         projectId: req.query.projectId,
         status: req.query.status
-            ? req.query.status?.split(",")
+            ? (_b = req.query.status) === null || _b === void 0 ? void 0 : _b.split(",")
             : undefined,
         priority: req.query.priority
-            ? req.query.priority?.split(",")
+            ? (_c = req.query.priority) === null || _c === void 0 ? void 0 : _c.split(",")
             : undefined,
         assignedTo: req.query.assignedTo
-            ? req.query.assignedTo?.split(",")
+            ? (_d = req.query.assignedTo) === null || _d === void 0 ? void 0 : _d.split(",")
             : undefined,
         keyword: req.query.keyword,
         dueDate: req.query.dueDate,
@@ -67,7 +70,8 @@ exports.getAllTasksController = (0, asyncHandler_middleware_1.asyncHandler)(asyn
     });
 });
 exports.getTaskByIdController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const taskId = task_validation_1.taskIdSchema.parse(req.params.id);
     const projectId = project_validation_1.projectIdSchema.parse(req.params.projectId);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
@@ -80,7 +84,8 @@ exports.getTaskByIdController = (0, asyncHandler_middleware_1.asyncHandler)(asyn
     });
 });
 exports.deleteTaskController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const taskId = task_validation_1.taskIdSchema.parse(req.params.id);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);

@@ -10,9 +10,10 @@ const role_enum_1 = require("../enums/role.enum");
 const project_service_1 = require("../services/project.service");
 const http_config_1 = require("../config/http.config");
 exports.createProjectController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
+    var _a;
     const body = project_validation_1.createProjectSchema.parse(req.body);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
-    const userId = req.user?._id;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);
     (0, roleGuard_1.roleGuard)(role, [role_enum_1.Permissions.CREATE_PROJECT]);
     const { project } = await (0, project_service_1.createProjectService)(userId, workspaceId, body);
@@ -22,8 +23,9 @@ exports.createProjectController = (0, asyncHandler_middleware_1.asyncHandler)(as
     });
 });
 exports.getAllProjectsInWorkspaceController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
+    var _a;
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
-    const userId = req.user?._id;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);
     (0, roleGuard_1.roleGuard)(role, [role_enum_1.Permissions.VIEW_ONLY]);
     const pageSize = parseInt(req.query.pageSize) || 10;
@@ -43,9 +45,10 @@ exports.getAllProjectsInWorkspaceController = (0, asyncHandler_middleware_1.asyn
     });
 });
 exports.getProjectByIdAndWorkspaceIdController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
+    var _a;
     const projectId = project_validation_1.projectIdSchema.parse(req.params.id);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
-    const userId = req.user?._id;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);
     (0, roleGuard_1.roleGuard)(role, [role_enum_1.Permissions.VIEW_ONLY]);
     const { project } = await (0, project_service_1.getProjectByIdAndWorkspaceIdService)(workspaceId, projectId);
@@ -55,9 +58,10 @@ exports.getProjectByIdAndWorkspaceIdController = (0, asyncHandler_middleware_1.a
     });
 });
 exports.getProjectAnalyticsController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
+    var _a;
     const projectId = project_validation_1.projectIdSchema.parse(req.params.id);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
-    const userId = req.user?._id;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);
     (0, roleGuard_1.roleGuard)(role, [role_enum_1.Permissions.VIEW_ONLY]);
     const { analytics } = await (0, project_service_1.getProjectAnalyticsService)(workspaceId, projectId);
@@ -67,7 +71,8 @@ exports.getProjectAnalyticsController = (0, asyncHandler_middleware_1.asyncHandl
     });
 });
 exports.updateProjectController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const projectId = project_validation_1.projectIdSchema.parse(req.params.id);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
     const body = project_validation_1.updateProjectSchema.parse(req.body);
@@ -80,7 +85,8 @@ exports.updateProjectController = (0, asyncHandler_middleware_1.asyncHandler)(as
     });
 });
 exports.deleteProjectController = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const userId = req.user?._id;
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const projectId = project_validation_1.projectIdSchema.parse(req.params.id);
     const workspaceId = workspace_validation_1.workspaceIdSchema.parse(req.params.workspaceId);
     const { role } = await (0, member_service_1.getMemberRoleInWorkspace)(userId, workspaceId);

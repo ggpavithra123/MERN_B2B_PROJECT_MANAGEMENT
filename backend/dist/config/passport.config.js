@@ -50,7 +50,7 @@ passport_1.default.use(new passport_local_1.Strategy({
         return done(null, user);
     }
     catch (error) {
-        return done(error, false, { message: error?.message });
+        return done(error, false, { message: error === null || error === void 0 ? void 0 : error.message });
     }
 }));
 passport_1.default.serializeUser((user, done) => done(null, user));

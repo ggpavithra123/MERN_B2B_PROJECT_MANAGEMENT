@@ -50,6 +50,7 @@ const getProjectByIdAndWorkspaceIdService = async (workspaceId, projectId) => {
 };
 exports.getProjectByIdAndWorkspaceIdService = getProjectByIdAndWorkspaceIdService;
 const getProjectAnalyticsService = async (workspaceId, projectId) => {
+    var _a, _b, _c;
     const project = await project_model_1.default.findById(projectId);
     if (!project || project.workspace.toString() !== workspaceId.toString()) {
         throw new appError_1.NotFoundException("Project not found or does not belong to this workspace");
@@ -91,9 +92,9 @@ const getProjectAnalyticsService = async (workspaceId, projectId) => {
     ]);
     const _analytics = taskAnalytics[0];
     const analytics = {
-        totalTasks: _analytics.totalTasks[0]?.count || 0,
-        overdueTasks: _analytics.overdueTasks[0]?.count || 0,
-        completedTasks: _analytics.completedTasks[0]?.count || 0,
+        totalTasks: ((_a = _analytics.totalTasks[0]) === null || _a === void 0 ? void 0 : _a.count) || 0,
+        overdueTasks: ((_b = _analytics.overdueTasks[0]) === null || _b === void 0 ? void 0 : _b.count) || 0,
+        completedTasks: ((_c = _analytics.completedTasks[0]) === null || _c === void 0 ? void 0 : _c.count) || 0,
     };
     return {
         analytics,

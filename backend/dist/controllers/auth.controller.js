@@ -11,7 +11,8 @@ const http_config_1 = require("../config/http.config");
 const auth_service_1 = require("../services/auth.service");
 const passport_1 = __importDefault(require("passport"));
 exports.googleLoginCallback = (0, asyncHandler_middleware_1.asyncHandler)(async (req, res) => {
-    const currentWorkspace = req.user?.currentWorkspace;
+    var _a;
+    const currentWorkspace = (_a = req.user) === null || _a === void 0 ? void 0 : _a.currentWorkspace;
     if (!currentWorkspace) {
         return res.redirect(`${app_config_1.config.FRONTEND_GOOGLE_CALLBACK_URL}?status=failure`);
     }
@@ -33,7 +34,7 @@ exports.loginController = (0, asyncHandler_middleware_1.asyncHandler)(async (req
         }
         if (!user) {
             return res.status(http_config_1.HTTPSTATUS.UNAUTHORIZED).json({
-                message: info?.message || "Invalid email or password",
+                message: (info === null || info === void 0 ? void 0 : info.message) || "Invalid email or password",
             });
         }
         console.log("User:", user);

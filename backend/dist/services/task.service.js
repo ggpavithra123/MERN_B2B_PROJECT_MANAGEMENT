@@ -58,19 +58,20 @@ const updateTaskService = async (workspaceId, projectId, taskId, body) => {
 };
 exports.updateTaskService = updateTaskService;
 const getAllTasksService = async (workspaceId, filters, pagination) => {
+    var _a, _b, _c;
     const query = {
         workspace: workspaceId,
     };
     if (filters.projectId) {
         query.project = filters.projectId;
     }
-    if (filters.status && filters.status?.length > 0) {
+    if (filters.status && ((_a = filters.status) === null || _a === void 0 ? void 0 : _a.length) > 0) {
         query.status = { $in: filters.status };
     }
-    if (filters.priority && filters.priority?.length > 0) {
+    if (filters.priority && ((_b = filters.priority) === null || _b === void 0 ? void 0 : _b.length) > 0) {
         query.priority = { $in: filters.priority };
     }
-    if (filters.assignedTo && filters.assignedTo?.length > 0) {
+    if (filters.assignedTo && ((_c = filters.assignedTo) === null || _c === void 0 ? void 0 : _c.length) > 0) {
         query.assignedTo = { $in: filters.assignedTo };
     }
     if (filters.keyword && filters.keyword !== undefined) {

@@ -11,6 +11,7 @@ const roles_permission_model_1 = __importDefault(require("../models/roles-permis
 const workspace_model_1 = __importDefault(require("../models/workspace.model"));
 const appError_1 = require("../utils/appError");
 const getMemberRoleInWorkspace = async (userId, workspaceId) => {
+    var _a;
     const workspace = await workspace_model_1.default.findById(workspaceId);
     if (!workspace) {
         throw new appError_1.NotFoundException("Workspace not found");
@@ -23,7 +24,7 @@ const getMemberRoleInWorkspace = async (userId, workspaceId) => {
     if (!member) {
         throw new appError_1.UnauthorizedException("You are not a member of this workspace", error_code_enum_1.ErrorCodeEnum.ACCESS_UNAUTHORIZED);
     }
-    const roleName = member.role?.name;
+    const roleName = (_a = member.role) === null || _a === void 0 ? void 0 : _a.name;
     return { role: roleName };
 };
 exports.getMemberRoleInWorkspace = getMemberRoleInWorkspace;

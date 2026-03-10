@@ -157,6 +157,7 @@ const updateWorkspaceByIdService = async (workspaceId, name, description) => {
 };
 exports.updateWorkspaceByIdService = updateWorkspaceByIdService;
 const deleteWorkspaceService = async (workspaceId, userId) => {
+    var _a;
     const session = await mongoose_1.default.startSession();
     session.startTransaction();
     try {
@@ -178,7 +179,7 @@ const deleteWorkspaceService = async (workspaceId, userId) => {
             workspaceId: workspace._id,
         }).session(session);
         // Update the user's currentWorkspace if it matches the deleted workspace
-        if (user?.currentWorkspace?.equals(workspaceId)) {
+        if ((_a = user === null || user === void 0 ? void 0 : user.currentWorkspace) === null || _a === void 0 ? void 0 : _a.equals(workspaceId)) {
             const memberWorkspace = await member_model_1.default.findOne({ userId }).session(session);
             // Update the user's currentWorkspace
             user.currentWorkspace = memberWorkspace
