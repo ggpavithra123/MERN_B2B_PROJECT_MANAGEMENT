@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // CORS (must be before session)
 app.use(
   cors({
-    origin: config.FRONTEND_ORIGIN,
+    origin: "https://mern-b2-b-teampro-qplw.vercel.app",
     credentials: true,
   })
 );
