@@ -21,6 +21,7 @@ const workspace_route_1 = __importDefault(require("./routes/workspace.route"));
 const member_route_1 = __importDefault(require("./routes/member.route"));
 const project_route_1 = __importDefault(require("./routes/project.route"));
 const task_route_1 = __importDefault(require("./routes/task.route")); // ✅ Added task route
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const app = (0, express_1.default)();
 const BASE_PATH = "/api";
 //const BASE_PATH = config.BASE_PATH;   
@@ -39,11 +40,15 @@ app.use((0, express_session_1.default)({
     secret: app_config_1.config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: connect_mongo_1.default.create({
+        mongoUrl: app_config_1.config.MONGO_URI,
+        collectionName: "sessions",
+    }),
     cookie: {
-        maxAge: 24 * 60 * 60 * 1000,
-        secure: true, // required for cross-site cookies
+        secure: true,
+        sameSite: "none",
         httpOnly: true,
-        sameSite: "none", // required for Vercel ↔ Render
+        maxAge: 1000 * 60 * 60 * 24,
     },
 }));
 // Passport authentication
@@ -59,7 +64,7 @@ app.get("/", (0, asyncHandler_middleware_1.asyncHandler)(async (req, res, next) 
 // Auth routes
 app.use(`${BASE_PATH}/auth`, auth_route_1.default);
 // Protected routes
-app.use(`${BASE_PATH}/user`, user_route_1.default);
+app.use(`${BASE_PATH}/user`, isAuthenticated_middleware_1.default, user_route_1.default);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated_middleware_1.default, workspace_route_1.default);
 app.use(`${BASE_PATH}/member`, isAuthenticated_middleware_1.default, member_route_1.default);
 app.use(`${BASE_PATH}/project`, isAuthenticated_middleware_1.default, project_route_1.default);
