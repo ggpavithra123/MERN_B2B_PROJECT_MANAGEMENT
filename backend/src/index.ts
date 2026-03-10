@@ -48,9 +48,9 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      secure: config.NODE_ENV === "production",
+      secure: true,        // required for cross-site cookies
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none",    // required for Vercel ↔ Render
     },
   })
 );
