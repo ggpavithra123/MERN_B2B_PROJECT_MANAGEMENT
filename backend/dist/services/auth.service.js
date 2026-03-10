@@ -74,11 +74,13 @@ const loginOrCreateAccountService = async (data) => {
 exports.loginOrCreateAccountService = loginOrCreateAccountService;
 const registerUserService = async (body) => {
     const { email, name, password } = body;
+    console.log("REGISTER REQUEST:", { email, name });
     const session = await mongoose_1.default.startSession();
     try {
         session.startTransaction();
         const existingUser = await user_model_1.default.findOne({ email }).session(session);
         if (existingUser) {
+            console.log("USER ALREADY EXISTS:", email);
             throw new appError_1.BadRequestException("Email already exists");
         }
         const user = new user_model_1.default({
@@ -87,19 +89,21 @@ const registerUserService = async (body) => {
             password,
         });
         await user.save({ session });
+        console.log("USER CREATED:", user._id);
         const account = new account_model_1.default({
             userId: user._id,
             provider: account_provider_enum_1.ProviderEnum.EMAIL,
             providerId: email,
         });
         await account.save({ session });
-        // 3. Create a new workspace for the new user
+        console.log("ACCOUNT CREATED FOR USER:", user._id);
         const workspace = new workspace_model_1.default({
             name: `My Workspace`,
             description: `Workspace created for ${user.name}`,
             owner: user._id,
         });
         await workspace.save({ session });
+        console.log("WORKSPACE CREATED:", workspace._id);
         const ownerRole = await roles_permission_model_1.default.findOne({
             name: role_enum_1.Roles.OWNER,
         }).session(session);
@@ -113,11 +117,15 @@ const registerUserService = async (body) => {
             joinedAt: new Date(),
         });
         await member.save({ session });
+        console.log("MEMBER CREATED:", member._id);
         user.currentWorkspace = workspace._id;
         await user.save({ session });
+        console.log("CURRENT WORKSPACE SET:", workspace._id);
         await session.commitTransaction();
         session.endSession();
-        console.log("End Session...");
+        console.log("TRANSACTION SUCCESS");
+        console.log("USER ID:", user._id);
+        console.log("WORKSPACE ID:", workspace._id);
         return {
             userId: user._id,
             workspaceId: workspace._id,
@@ -126,6 +134,7 @@ const registerUserService = async (body) => {
     catch (error) {
         await session.abortTransaction();
         session.endSession();
+        console.log("TRANSACTION FAILED:", error);
         throw error;
     }
 };
