@@ -2,59 +2,37 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import session from "express-session";
-//import session from "cookie-session";
+import passport from "passport";
+
 import { config } from "./config/app.config";
 import connectDatabase from "./config/database.config";
-import { errorHandler } from "./middlewares/errorHandler.middleware.ts";
-import { asyncHandler } from "./middlewares/asyncHandler.middleware.ts";
+import "./config/passport.config";
+
+import { errorHandler } from "./middlewares/errorHandler.middleware";
+import { asyncHandler } from "./middlewares/asyncHandler.middleware";
+import isAuthenticated from "./middlewares/isAuthenticated.middleware";
+
 import { HTTPSTATUS } from "./config/http.config";
 import { BadRequestException } from "./utils/appError";
 import { ErrorCodeEnum } from "./enums/error-code.enum";
-import "./config/passport.config";
-import passport from "passport";
+
 import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
 import workspaceRoutes from "./routes/workspace.route";
 import memberRoutes from "./routes/member.route";
-import isAuthenticated from "./middlewares/isAuthenticated.middleware";
-import projectRoutes from "./routes/project.route.ts";
-
+import projectRoutes from "./routes/project.route";
+import taskRoutes from "./routes/task.route"; // ✅ Added task route
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
 
-app.use(express.json());
+/* --------------------------- Middleware --------------------------- */
 
+// Body parser
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: config.SESSION_SECRET, // ✅ Use secret instead of keys
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // ✅ Move here
-      secure: config.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax",
-    },
-  })
-);
-
-// app.use(
-//   session({
-//     name: "session",
-//     keys: [config.SESSION_SECRET],
-//     maxAge: 24 * 60 * 60 * 1000,
-//     secure: config.NODE_ENV === "production",
-//     httpOnly: true,
-//     sameSite: "lax",
-//   })
-// );
-
-app.use(passport.initialize());
-app.use(passport.session());
-
+// CORS (must be before session)
 app.use(
   cors({
     origin: config.FRONTEND_ORIGIN,
@@ -62,29 +40,57 @@ app.use(
   })
 );
 
+// Session configuration
+app.use(
+  session({
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: config.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  })
+);
+
+// Passport authentication
+app.use(passport.initialize());
+app.use(passport.session());
+
+/* ----------------------------- Routes ----------------------------- */
+
+// Health / Test route
 app.get(
-  `/`,
+  "/",
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    throw new BadRequestException(
-      "This is a bad request",
-      ErrorCodeEnum.AUTH_INVALID_TOKEN
-    );
     return res.status(HTTPSTATUS.OK).json({
-      message: "Hello Subscribe to the channel & share",
+      message: "Server running successfully 🚀",
     });
   })
 );
 
+// Auth routes
 app.use(`${BASE_PATH}/auth`, authRoutes);
-app.use(`${BASE_PATH}/user`,isAuthenticated, userRoutes);
+
+// Protected routes
+app.use(`${BASE_PATH}/user`, isAuthenticated, userRoutes);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRoutes);
 app.use(`${BASE_PATH}/member`, isAuthenticated, memberRoutes);
 app.use(`${BASE_PATH}/project`, isAuthenticated, projectRoutes);
-//console.log(`${BASE_PATH}/auth`, authRoutes);
+app.use(`${BASE_PATH}/task`, isAuthenticated, taskRoutes); // ✅ Task APIs
+
+/* ------------------------- Error Handling ------------------------- */
 
 app.use(errorHandler);
 
+/* --------------------------- Server Start ------------------------- */
+
 app.listen(config.PORT, async () => {
-  console.log(`Server listening on port ${config.PORT} in ${config.NODE_ENV}`);
+  console.log(
+    `🚀 Server running on port ${config.PORT} in ${config.NODE_ENV} mode`
+  );
+
   await connectDatabase();
-});  
+});
