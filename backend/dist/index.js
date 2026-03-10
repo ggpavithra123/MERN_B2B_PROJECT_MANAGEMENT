@@ -59,7 +59,7 @@ app.get("/", (0, asyncHandler_middleware_1.asyncHandler)(async (req, res, next) 
 // Auth routes
 app.use(`${BASE_PATH}/auth`, auth_route_1.default);
 // Protected routes
-app.use(`${BASE_PATH}/user`, isAuthenticated_middleware_1.default, user_route_1.default);
+app.use(`${BASE_PATH}/user`, user_route_1.default);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated_middleware_1.default, workspace_route_1.default);
 app.use(`${BASE_PATH}/member`, isAuthenticated_middleware_1.default, member_route_1.default);
 app.use(`${BASE_PATH}/project`, isAuthenticated_middleware_1.default, project_route_1.default);
