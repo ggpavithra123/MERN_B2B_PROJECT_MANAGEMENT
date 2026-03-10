@@ -22,27 +22,26 @@ const member_route_1 = __importDefault(require("./routes/member.route"));
 const project_route_1 = __importDefault(require("./routes/project.route"));
 const task_route_1 = __importDefault(require("./routes/task.route")); // ✅ Added task route
 const app = (0, express_1.default)();
-const BASE_PATH = app_config_1.config.BASE_PATH;
+const BASE_PATH = "/api";
+//const BASE_PATH = config.BASE_PATH;   
 /* --------------------------- Middleware --------------------------- */
 // Body parser
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // CORS (must be before session)
-// CORS (must be before session)
 app.use((0, cors_1.default)({
     origin: "https://mern-b2-b-teampro-qplw.vercel.app",
     credentials: true,
 }));
-// Session configuration
 app.use((0, express_session_1.default)({
     secret: app_config_1.config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
-        secure: app_config_1.config.NODE_ENV === "production",
+        secure: true, // required for cross-site cookies
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "none", // required for Vercel ↔ Render
     },
 }));
 // Passport authentication
