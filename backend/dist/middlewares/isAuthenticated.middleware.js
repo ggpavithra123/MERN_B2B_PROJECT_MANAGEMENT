@@ -6,7 +6,7 @@ const isAuthenticated = (req, res, next) => {
     console.log("USER BEFORE:", req.user);
     // Hardcode user for debugging
     req.user = {
-        _id: "69af85a56d3174f926a3e283",
+        _id: "69af85a56d3174f926a3e283" ,
     };
     console.log("USER AFTER:", req.user);
     if (!req.user || !req.user._id) {
