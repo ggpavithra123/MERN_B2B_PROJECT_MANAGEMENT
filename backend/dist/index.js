@@ -46,9 +46,10 @@ app.use((0, express_session_1.default)({
     }),
     cookie: {
         secure: true,
-        sameSite: "none",
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
+        domain: ".onrender.com"
     },
 }));
 // Passport authentication
