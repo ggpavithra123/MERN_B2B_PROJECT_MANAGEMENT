@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth20_1 = require("passport-google-oauth20");
 const passport_local_1 = require("passport-local");
+const user_model_1 = __importDefault(require("../models/user.model"));
 const app_config_1 = require("./app.config");
 const appError_1 = require("../utils/appError");
 const account_provider_enum_1 = require("../enums/account-provider.enum");
@@ -50,8 +51,18 @@ passport_1.default.use(new passport_local_1.Strategy({
         return done(null, user);
     }
     catch (error) {
-        return done(error, false, { message: error === null || error === void 0 ? void 0 : error.message });
+        return done(error, false, { message: error?.message });
     }
 }));
-passport_1.default.serializeUser((user, done) => done(null, user));
-passport_1.default.deserializeUser((user, done) => done(null, user));
+passport_1.default.serializeUser((user, done) => {
+    done(null, user._id); // store only user id
+});
+passport_1.default.deserializeUser(async (id, done) => {
+    try {
+        const user = await user_model_1.default.findById(id);
+        done(null, user);
+    }
+    catch (error) {
+        done(error, null);
+    }
+});
