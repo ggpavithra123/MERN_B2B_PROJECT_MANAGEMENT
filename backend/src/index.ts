@@ -24,7 +24,7 @@ import projectRoutes from "./routes/project.route";
 import taskRoutes from "./routes/task.route"; // ✅ Added task route
 
 const app = express();
-const BASE_PATH = config.BASE_PATH;
+const BASE_PATH = config.BASE_PATH;   
 
 /* --------------------------- Middleware --------------------------- */
 
