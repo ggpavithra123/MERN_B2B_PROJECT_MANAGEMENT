@@ -33,6 +33,8 @@ app.use((0, cors_1.default)({
     origin: "https://mern-b2-b-teampro-qplw.vercel.app",
     credentials: true,
 }));
+/* ✅ ADD THIS LINE HERE */
+app.set("trust proxy", 1);
 app.use((0, express_session_1.default)({
     secret: app_config_1.config.SESSION_SECRET,
     resave: false,
