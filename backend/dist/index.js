@@ -28,8 +28,9 @@ const BASE_PATH = app_config_1.config.BASE_PATH;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // CORS (must be before session)
+// CORS (must be before session)
 app.use((0, cors_1.default)({
-    origin: app_config_1.config.FRONTEND_ORIGIN,
+    origin: "https://mern-b2-b-teampro-qplw.vercel.app",
     credentials: true,
 }));
 // Session configuration
